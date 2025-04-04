@@ -1,0 +1,111 @@
+ROLE OF HEAD IN GIT:
+HEAD is a fundamental concept in Git that represents:
+
+A pointer to the current branch reference (which in turn points to a commit)
+
+Essentially marks your current position in the repository's history
+
+Determines what gets checked out in your working directory
+
+There are two main states for HEAD:
+
+Attached state: Points to a branch reference (normal workflow)
+
+Detached state: Points directly to a commit hash (when checking out specific commits)
+
+How HEAD Changes During Resets
+The behavior depends on the reset type (--soft, --mixed, or --hard):
+
+git reset --soft <commit>:
+
+Moves HEAD (and current branch pointer) to the target commit
+
+Keeps all changes from intermediate commits staged
+
+Working directory remains unchanged
+
+git reset --mixed <commit> (default):
+
+Moves HEAD (and branch pointer) to the target commit
+
+Unstages changes but keeps them in working directory
+
+Lets you re-stage changes selectively
+
+git reset --hard <commit>:
+
+Moves HEAD (and branch pointer) to the target commit
+
+Discards all changes (both staged and unstaged)
+
+Working directory matches exactly the target commit
+
+
+
+Steps to Resolve the Conflict
+1. Locate the Conflict
+Git marks conflicting sections in the affected files with:
+
+<<<<<<< HEAD (your current branch’s version)
+
+======= (divider between changes)
+
+>>>>>>> branch-name (incoming branch’s version)
+
+2. Decide How to Resolve It
+You have three choices:
+
+Keep your changes (delete the incoming branch’s version).
+
+Use the incoming changes (delete your version).
+
+Manually combine them (edit to merge both changes logically).
+
+3. Remove Conflict Markers
+After editing, delete all <<<<<<<, =======, and >>>>>>> lines to finalize the resolution.
+
+4. Mark as Resolved
+Save the file, stage it (git add), and complete the merge/rebase with git commit.
+
+
+
+
+Merging vs. Rebasing: Key Differences
+Commit History
+Merging preserves the original branching structure by creating a new merge commit that ties both branches together. This maintains an accurate timeline but can make history look complex.
+
+Rebasing rewrites history by moving commits from one branch onto another, resulting in a linear sequence. This simplifies history but alters commit hashes and timestamps.
+
+Workflow Impact
+Merging is straightforward—Git combines changes and creates a merge commit. Conflicts are resolved once at the end.
+
+Rebasing requires replaying each commit onto the new base, potentially causing multiple conflict resolutions (one per replayed commit)
+
+
+
+
+
+
+Reverting a Commit
+What it does: Creates a new commit that undoes the changes from a specific past commit.
+
+Effect on history: Preserves all existing commits (non-destructive).
+
+Usage:
+
+Safe for shared/public branches (doesn’t rewrite history).
+
+Ideal for undoing changes while maintaining transparency.
+
+Resetting the Repository
+What it does: Moves the branch pointer backward to a past commit (optionally discarding changes).
+
+Effect on history: Erases commits after the target (destructive if --hard is used).
+
+Usage:
+
+Risky for shared branches (rewrites history).
+
+Best for local cleanup (e.g., discarding uncommitted changes or fixing private branch history).
+
+
